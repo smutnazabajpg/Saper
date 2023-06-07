@@ -109,7 +109,7 @@ function GameOver(win)
             else
                 alert("youDied")
             gameFinished = true;
-        }, 1)
+        }, 100)
 }
 function GetNumberOfBombs(row, collumn)
 {
