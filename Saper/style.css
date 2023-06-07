@@ -4,5 +4,8 @@
     float: left;
 }
 .ActiveBoardField{
-    background-color: rgb(207, 211, 214);
+    background-color: rgb(184, 188, 192);
+}
+body{
+    background-color: rgb(179, 179, 179);
 }

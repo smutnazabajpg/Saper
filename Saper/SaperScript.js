@@ -89,10 +89,11 @@ function FieldClickEventHandler(row, collumn)
     else
     {
         field.element.className = "ActiveBoardField";
-        field.element.innerText = GetNumberOfBombs(row, collumn);
+        bombs = GetNumberOfBombs(row, collumn)
+        field.element.innerText = bombs == 0 ?'ㅤ':bombs;
         if(--uncoverFields == numberOfBombs)
             GameOver(true);
-        else if(field.element.innerText == 0)
+        else if (field.element.innerText == 'ㅤ')
             UncoverTheFogOfWar(row, collumn);
     }
 
@@ -178,6 +179,10 @@ class Field
         this.sn = 0;
 
         element.addEventListener("click", () => {
+            if(!isNaN(parseInt(element.innerText)))
+            {
+                UncoverTheFogOfWar(row, collumn)
+            }
             FieldClickEventHandler(row, collumn);
         });
 
