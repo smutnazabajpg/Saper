@@ -3,7 +3,7 @@ let gameFinished;
 let numberOfBombs;
 let rowCount;
 let collumnCount;
-let specialSigns = ['🚩','❓', ''];
+let specialSigns = ['', '🚩','❓'];
 let uncoverFields;
 let fieldsWithBomb = [];
 
@@ -96,8 +96,6 @@ function FieldClickEventHandler(row, collumn)
         else if (field.element.innerText == 'ㅤ')
             UncoverTheFogOfWar(row, collumn);
     }
-
-
 }
 function GameOver(win)
 {
@@ -153,9 +151,7 @@ function UncoverTheFogOfWar(row, collumn)
             tmpCollumn = collumn - j;
 
             if(CheckFieldIsDefined(tmpRow, tmpCollumn))
-            {
                 FieldClickEventHandler(tmpRow, tmpCollumn)
-            }
         }
     }
 }
@@ -170,29 +166,48 @@ function UncoverBombs()
         field.element.innerText = "💣"
     });
 }
+function GetNearFlagsNumber(row, collumn)
+{
+    let tmpRow;
+    let tmpCollumn;
+    let numberOfFlags = 0;
+    for (let i = -1; i < 2; i++)
+    {
+        for (let j = -1; j < 2; j++)
+        {
+            tmpRow = row - i;
+            tmpCollumn = collumn - j;
+
+            if(CheckFieldIsDefined(tmpRow, tmpCollumn)
+                && board[tmpRow][tmpCollumn].fieldSign == 1)
+                numberOfFlags++;
+        }
+    }
+        return numberOfFlags;
+}
 class Field
 {
     constructor(element, row, collumn)
     {
         this.isBomb = false;
         this.element = element;  
-        this.sn = 0;
+        this.fieldSign = 0;
 
         element.addEventListener("click", () => {
-            if(!isNaN(parseInt(element.innerText)))
-            {
+            if(!isNaN(parseInt(element.innerText))
+                && this.element.innerText == GetNearFlagsNumber(row, collumn))
                 UncoverTheFogOfWar(row, collumn)
-            }
-            FieldClickEventHandler(row, collumn);
+            else
+                FieldClickEventHandler(row, collumn);
         });
 
         element.addEventListener("auxclick", () => {
             if(isNaN(parseInt(element.innerText))
                && !gameFinished)
             {
-                this.element.innerText = specialSigns[this.sn];
-                this.sn++;
-                this.sn %= 3;
+                this.fieldSign++;
+                this.fieldSign %= 3;
+                this.element.innerText = specialSigns[this.fieldSign];
             }
         });
     }
